@@ -36,7 +36,7 @@ public class HelloWorld {
 					ServletException {
 		        response.setContentType("text/html");
 		        response.setStatus(HttpServletResponse.SC_OK);
-		        response.getWriter().println("<h1>Hello World from Java</h1>");
+		        response.getWriter().println("<h1>Hello World from Java</h1>" + request.getParameterMap());
 		        
 		        Request base_request = (request instanceof Request) ? (Request)request:HttpConnection.getCurrentConnection().getRequest();
 		        base_request.setHandled(true); 
