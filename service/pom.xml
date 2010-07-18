@@ -49,7 +49,7 @@ org.springframework.osgi.context.support,
 org.springframework.osgi.service,
 org.springframework.osgi.service.importer
                         </Import-Package>
-                        <Export-Package>org.apache.jetty.service.api</Export-Package>
+                        <Export-Package>org.apache.jetty.service.api,org.apache.jetty.service.util</Export-Package>
                         <Private-Package>org.apache.jetty.service</Private-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
