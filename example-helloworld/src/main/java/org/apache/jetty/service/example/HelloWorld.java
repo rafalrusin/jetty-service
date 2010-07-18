@@ -15,20 +15,18 @@ import org.mortbay.jetty.handler.AbstractHandler;
 import org.mortbay.jetty.handler.ContextHandler;
 import org.mortbay.jetty.handler.ContextHandlerCollection;
 import org.mortbay.jetty.handler.ResourceHandler;
-import org.mortbay.resource.Resource;
 
 public class HelloWorld {
 	
 	private JettyService jettyService;
-	private ContextHandlerCollection handler;
-	private Handler reg;
+	private Handler registered;
 	
 	public void setJettyService(JettyService jettyService) {
 		this.jettyService = jettyService;
 	}
 
 	public void init() throws Exception {
-		handler = new ContextHandlerCollection();
+		ContextHandlerCollection handler = new ContextHandlerCollection();
 		
 		handler.addContext("/app", "app").setHandler(new AbstractHandler() {
 			public void handle(String target, HttpServletRequest request,
@@ -42,22 +40,16 @@ public class HelloWorld {
 		        base_request.setHandled(true); 
 			}
 		});
-		ResourceHandler r = new ResourceHandler();
 		
-		System.out.println(getClass().getResource("/static"));
+		ResourceHandler resourceHandler = new ResourceHandler();
+		resourceHandler.setBaseResource(new BundleResource(getClass().getResource("/static")));
+		ContextHandler contextHandler = handler.addContext("","");
+		contextHandler.setHandler(resourceHandler);
 		
-//		Resource r2 = new URLResource(getClass().getResource("/static"), new URLConnection(getClass().getResource("/static")));
-		Resource r2 = new BundleResource(getClass().getResource("/static"));
-//		Resource r2 = new FileResource(getClass().getResource("/static"));
-		r.setBaseResource(r2);
-		ContextHandler ch = handler.addContext("","");
-		ch.setHandler(r);
-		ch.setClassLoader(getClass().getClassLoader());
-		
-		reg = jettyService.registerApp("helloWorld", handler);
+		registered = jettyService.registerApp("helloWorld", handler);
 	}
 	
 	public void destroy() throws Exception {
-		jettyService.unregisterApp(reg);
+		jettyService.unregisterApp(registered);
 	}
 }
