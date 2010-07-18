@@ -3,6 +3,6 @@ package org.apache.jetty.service.api;
 import org.mortbay.jetty.Handler;
 
 public interface JettyService {
-	public void registerApp(String name, Handler handler);
-	public void unregisterApp(Handler handler);
+	public Handler registerApp(String name, Handler handler) throws Exception;
+	public void unregisterApp(Handler handler) throws Exception;
 }

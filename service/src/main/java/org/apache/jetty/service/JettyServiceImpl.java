@@ -3,6 +3,7 @@ package org.apache.jetty.service;
 import org.apache.jetty.service.api.JettyService;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.ContextHandler;
 import org.mortbay.jetty.handler.ContextHandlerCollection;
 
 public class JettyServiceImpl implements JettyService {
@@ -20,11 +21,17 @@ public class JettyServiceImpl implements JettyService {
 		server.stop();
 	}
 	
-	public void registerApp(String name, Handler handler) {
-		rootContext.addContext("/" + name, name).setHandler(handler);
+	public Handler registerApp(String name, Handler handler) throws Exception {
+		server.stop();
+		ContextHandler h = rootContext.addContext("/" + name, name);
+		h.setHandler(handler);
+		server.start();
+		return h;
 	}
 	
-	public void unregisterApp(Handler handler) {
+	public void unregisterApp(Handler handler) throws Exception {
+		server.stop();
 		rootContext.removeHandler(handler);
+		server.start();
 	}
 }
